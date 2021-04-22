@@ -1,28 +1,29 @@
 {
   "compilerOptions": {
-    "target": "es2017",                                
-    "module": "commonjs",                           
-    "lib": ["es6"],                                   
-    "allowJs": true,                             
-    "outDir": "./dist",                              
-    "rootDir": "./src",                             
-    "removeComments": true,             
+    "target": "es2017",
+    "module": "commonjs",
+    "lib": ["es6"],
+    "allowJs": true,
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "removeComments": true,
     "typeRoots": [
       "./node_modules/@types",
       "./src/@types"
-    ],                             
-    "esModuleInterop": true,                        
+    ],
+    "esModuleInterop": true,
     "resolveJsonModule": true,
-    "experimentalDecorators": true,              
+    "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "skipLibCheck": true,                           
+    "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
     "paths": {
       "@controllers/*": ["./controllers/*"],
+      "@services/*": ["./services/*"],
       "@models/*": ["./models/*"],
       "@views/*": ["./views/*"],
-      "@config/*": ["./config/*"]
-    }   
+      "@routes/*": ["./routes/*"],
+    }
   }
 }
