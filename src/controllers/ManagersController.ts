@@ -1,13 +1,15 @@
-import Client from '@models/Client';
 import { Request, Response } from 'express';
 import CreateManagerService from '@services/Managers/CreateManagerService';
 // import DeleteManagerByIdService from '@services/Managers/DeleteManagerByIdService';
 // import UpdateManagerService from '@services/Managers/UpdateManagerService';
 import { getRepository } from 'typeorm';
+import Manager from '@models/Manager';
+import UpdateManagerService from '@services/Managers/UpdateManagersService';
+import DeleteManagerByIdService from '@services/Managers/DeleteManagerByIdService';
 
 export default class ManagersController {
   public async find(request: Request, response: Response): Promise<Response> {
-    const managersRepository = getRepository(Client);
+    const managersRepository = getRepository(Manager);
     const manager = await managersRepository.find();
 
     return response.json(manager);
@@ -30,34 +32,34 @@ export default class ManagersController {
     }
   }
 
-  // public async update(request: Request, response: Response): Promise<Response> {
-  //   try {
-  //     const { id, name, email, password } = request.body;
+  public async update(request: Request, response: Response): Promise<Response> {
+    try {
+      const { id, name, email, password } = request.body;
 
-  //     const updateManager = new UpdateManagerService();
+      const updateManager = new UpdateManagerService();
 
-  //     const manager = await updateManager.execute({
-  //       id,
-  //       name,
-  //       email,
-  //       password,
-  //     });
-  //     return response.json(manager);
-  //   } catch (err) {
-  //     return response.status(400).json(err.message);
-  //   }
-  // }
+      const manager = await updateManager.execute({
+        id,
+        name,
+        email,
+        password,
+      });
+      return response.json(manager);
+    } catch (err) {
+      return response.status(400).json(err.message);
+    }
+  }
 
-  // public async delete(request: Request, response: Response): Promise<Response> {
-  //   try {
-  //     const { id } = request.query;
+  public async delete(request: Request, response: Response): Promise<Response> {
+    try {
+      const { id } = request.query;
 
-  //     const deleteManager = new DeleteManagerByIdService();
+      const deleteManager = new DeleteManagerByIdService();
 
-  //     await deleteManager.execute(String(id));
-  //     return response.status(204).send();
-  //   } catch (err) {
-  //     return response.status(400).json(err.message);
-  //   }
-  // }
+      await deleteManager.execute(String(id));
+      return response.status(204).send();
+    } catch (err) {
+      return response.status(400).json(err.message);
+    }
+  }
 }

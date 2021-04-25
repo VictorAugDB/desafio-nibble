@@ -4,30 +4,37 @@ import Manager from '@models/Manager';
 import { hash } from 'bcryptjs';
 
 interface Request {
+  id: string;
   name: string;
   email: string;
   password: string;
 }
 
-class CreateManagerService {
-  public async execute({ name, email, password }: Request): Promise<Manager> {
+class UpdateManagerService {
+  public async execute({
+    id,
+    name,
+    email,
+    password,
+  }: Request): Promise<Manager> {
     const managersRepository = getRepository(Manager);
 
     const checkManagerExists = await managersRepository.findOne({
-      where: { email },
+      where: { id },
     });
 
-    if (checkManagerExists) {
-      throw new Error('Email already exists');
+    if (!checkManagerExists) {
+      throw new Error('Manager does not exists');
     }
 
     const hashedPassword = await hash(password, 8);
 
-    const manager = managersRepository.create({
+    const manager = {
+      ...checkManagerExists,
       name,
       email,
       password: hashedPassword,
-    });
+    };
 
     await managersRepository.save(manager);
 
@@ -35,4 +42,4 @@ class CreateManagerService {
   }
 }
 
-export default CreateManagerService;
+export default UpdateManagerService;
