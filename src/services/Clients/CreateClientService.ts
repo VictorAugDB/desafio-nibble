@@ -42,12 +42,12 @@ class CreateClientService {
       throw new Error('Email already exists');
     }
 
-    const checkDuplicatedPrimaryAdressess = addresses.map(
+    const checkDuplicatedPrimaryAddresses = addresses.map(
       address => address.is_primary_address,
     );
 
     if (
-      checkDuplicatedPrimaryAdressess.filter(isPrimary => isPrimary === true)
+      checkDuplicatedPrimaryAddresses.filter(isPrimary => isPrimary === true)
         .length > 1
     ) {
       throw new Error('Only allowed one primary address');

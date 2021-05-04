@@ -10,18 +10,18 @@ class UpdateAddressesService {
   public async execute({ addresses }: Request): Promise<Address[]> {
     const addressesRepository = getRepository(Address);
 
-    const checkPrimaryAdressess = addresses.map(
+    const checkPrimaryAddresses = addresses.map(
       address => address.is_primary_address,
     );
 
     if (
-      checkPrimaryAdressess.filter(isPrimary => isPrimary === true).length > 1
+      checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length > 1
     ) {
       throw new Error('Only allowed one primary address');
     }
 
     if (
-      checkPrimaryAdressess.filter(isPrimary => isPrimary === true).length < 1
+      checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length < 1
     ) {
       throw new Error('Primary address is needed');
     }

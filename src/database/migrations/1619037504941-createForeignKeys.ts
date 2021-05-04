@@ -6,7 +6,7 @@ export default class createForeignKeys1619037504941
     await queryRunner.createForeignKey(
       'addresses',
       new TableForeignKey({
-        name: 'ClientAdresses',
+        name: 'ClientAddresses',
         columnNames: ['client_id'],
         referencedColumnNames: ['id'],
         referencedTableName: 'clients',
@@ -17,6 +17,6 @@ export default class createForeignKeys1619037504941
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropForeignKey('addresses', 'ClientAdresses');
+    await queryRunner.dropForeignKey('addresses', 'ClientAddresses');
   }
 }

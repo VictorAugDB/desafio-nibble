@@ -8,9 +8,28 @@ import { getRepository } from 'typeorm';
 export default class AddressesController {
   public async find(request: Request, response: Response): Promise<Response> {
     const addressesRepository = getRepository(Address);
-    const address = await addressesRepository.find();
 
-    return response.json(address);
+    const addresses = await addressesRepository.find();
+
+    return response.json(addresses);
+  }
+
+  public async findById(
+    request: Request,
+    response: Response,
+  ): Promise<Response> {
+    try {
+      const addressId = request.query.id;
+
+      const addressesRepository = getRepository(Address);
+      const address = await addressesRepository.findOne({
+        where: { id: addressId },
+      });
+
+      return response.status(200).json(address);
+    } catch (err) {
+      return response.status(200).json(undefined);
+    }
   }
 
   public async create(request: Request, response: Response): Promise<Response> {

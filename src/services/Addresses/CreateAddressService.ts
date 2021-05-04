@@ -29,20 +29,20 @@ class CreateAddressService {
       where: { id: client_id },
     });
 
-    const addressesWithClientAdresses = [...client.addresses, ...addresses];
+    const addressesWithClientAddresses = [...client.addresses, ...addresses];
 
-    const checkPrimaryAdressess = addressesWithClientAdresses.map(
+    const checkPrimaryAddresses = addressesWithClientAddresses.map(
       address => address.is_primary_address,
     );
 
     if (
-      checkPrimaryAdressess.filter(isPrimary => isPrimary === true).length > 1
+      checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length > 1
     ) {
       throw new Error('Only allowed one primary address');
     }
 
     if (
-      checkPrimaryAdressess.filter(isPrimary => isPrimary === true).length < 1
+      checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length < 1
     ) {
       throw new Error('Primary address is needed');
     }

@@ -4,13 +4,42 @@ import CreateClientService from '@services/Clients/CreateClientService';
 import DeleteClientByIdService from '@services/Clients/DeleteClientByIdService';
 import UpdateClientService from '@services/Clients/UpdateClientService';
 import { getRepository } from 'typeorm';
+import { orderBy } from 'lodash';
 
 export default class ClientsController {
   public async find(request: Request, response: Response): Promise<Response> {
-    const clientsRepository = getRepository(Client);
-    const client = await clientsRepository.find();
+    try {
+      const { take, page } = request.query;
+      const clientsRepository = getRepository(Client);
 
-    return response.json(client);
+      if (take && page) {
+        const nextSkip = (Number(page) - 1) * Number(take);
+
+        const [clients, count] = await clientsRepository.findAndCount({
+          skip: nextSkip,
+          take: Number(take),
+        });
+
+        const orderedClients = orderBy(
+          clients,
+          client => client.updated_at,
+          'desc',
+        );
+
+        return response.json({ clients: orderedClients, count });
+      }
+      const clients = await clientsRepository.find();
+
+      const orderedClients = orderBy(
+        clients,
+        client => client.updated_at,
+        'desc',
+      );
+
+      return response.json(orderedClients);
+    } catch (err) {
+      return response.json(err.message);
+    }
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
