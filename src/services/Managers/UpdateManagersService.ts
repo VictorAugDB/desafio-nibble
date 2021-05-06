@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 
 import Manager from '@models/Manager';
 import { hash } from 'bcryptjs';
+import AppError from '@errors/AppError';
 
 interface Request {
   id: string;
@@ -24,7 +25,7 @@ class UpdateManagerService {
     });
 
     if (!checkManagerExists) {
-      throw new Error('Manager does not exists');
+      throw new AppError('Manager does not exists');
     }
 
     const hashedPassword = await hash(password, 8);

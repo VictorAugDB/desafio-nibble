@@ -16,50 +16,38 @@ export default class ManagersController {
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    try {
-      const { name, email, password } = request.body;
+    const { name, email, password } = request.body;
 
-      const createManager = new CreateManagerService();
+    const createManager = new CreateManagerService();
 
-      const manager = await createManager.execute({
-        name,
-        email,
-        password,
-      });
-      return response.json(manager);
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    const manager = await createManager.execute({
+      name,
+      email,
+      password,
+    });
+    return response.json(manager);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    try {
-      const { id, name, email, password } = request.body;
+    const { id, name, email, password } = request.body;
 
-      const updateManager = new UpdateManagerService();
+    const updateManager = new UpdateManagerService();
 
-      const manager = await updateManager.execute({
-        id,
-        name,
-        email,
-        password,
-      });
-      return response.json(manager);
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    const manager = await updateManager.execute({
+      id,
+      name,
+      email,
+      password,
+    });
+    return response.json(manager);
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    try {
-      const { id } = request.query;
+    const { id } = request.query;
 
-      const deleteManager = new DeleteManagerByIdService();
+    const deleteManager = new DeleteManagerByIdService();
 
-      await deleteManager.execute(String(id));
-      return response.status(204).send();
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    await deleteManager.execute(String(id));
+    return response.status(204).send();
   }
 }

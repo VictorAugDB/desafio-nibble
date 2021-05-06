@@ -1,9 +1,10 @@
 import { getRepository } from 'typeorm';
 import { compare } from 'bcryptjs';
 import { sign } from 'jsonwebtoken';
-import authConfig from '../../config/auth';
+import AppError from '@errors/AppError';
+import authConfig from '@config/auth';
 
-import Manager from '../../models/Manager';
+import Manager from '@models/Manager';
 
 interface Request {
   email: string;
@@ -22,13 +23,13 @@ class AuthenticateManagerService {
     const manager = await managersRepository.findOne({ where: { email } });
 
     if (!manager) {
-      throw new Error('Incorrect email/password combination');
+      throw new AppError('Incorrect email/password combination');
     }
 
     const passwordMatched = await compare(password, manager.password);
 
     if (!passwordMatched) {
-      throw new Error('Incorrect email/password combination');
+      throw new AppError('Incorrect email/password combination');
     }
 
     const { secret, expiresIn } = authConfig.jwt;

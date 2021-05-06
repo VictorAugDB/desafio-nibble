@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm';
 
-import Client from '../../models/Client';
-import Address from '../../models/Address';
+import AppError from '@errors/AppError';
+import Client from '@models/Client';
+import Address from '@models/Address';
 
 interface AddressProps {
   cep: string;
@@ -29,6 +30,10 @@ class CreateAddressService {
       where: { id: client_id },
     });
 
+    if (!client) {
+      throw new AppError('Client does not exists');
+    }
+
     const addressesWithClientAddresses = [...client.addresses, ...addresses];
 
     const checkPrimaryAddresses = addressesWithClientAddresses.map(
@@ -38,13 +43,13 @@ class CreateAddressService {
     if (
       checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length > 1
     ) {
-      throw new Error('Only allowed one primary address');
+      throw new AppError('Only allowed one primary address');
     }
 
     if (
       checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length < 1
     ) {
-      throw new Error('Primary address is needed');
+      throw new AppError('Primary address is needed');
     }
 
     const addressesCreate = addresses.map(address => {

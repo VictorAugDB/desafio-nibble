@@ -1,6 +1,7 @@
+import AppError from '@errors/AppError';
 import { getRepository } from 'typeorm';
 
-import Client from '../../models/Client';
+import Client from '@models/Client';
 
 interface Request {
   id: string;
@@ -25,7 +26,7 @@ class UpdateClientService {
     });
 
     if (!checkClientExists) {
-      throw new Error('Client does not exists');
+      throw new AppError('Client does not exists');
     }
 
     const client = {

@@ -2,6 +2,7 @@ import { getRepository } from 'typeorm';
 
 import Manager from '@models/Manager';
 import { hash } from 'bcryptjs';
+import AppError from '@errors/AppError';
 
 interface Request {
   name: string;
@@ -18,7 +19,7 @@ class CreateManagerService {
     });
 
     if (checkManagerExists) {
-      throw new Error('Email already exists');
+      throw new AppError('Email already exists');
     }
 
     const hashedPassword = await hash(password, 8);

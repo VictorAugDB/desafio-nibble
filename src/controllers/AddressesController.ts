@@ -18,64 +18,48 @@ export default class AddressesController {
     request: Request,
     response: Response,
   ): Promise<Response> {
-    try {
-      const addressId = request.query.id;
+    const addressId = request.query.id;
 
-      const addressesRepository = getRepository(Address);
-      const address = await addressesRepository.findOne({
-        where: { id: addressId },
-      });
+    const addressesRepository = getRepository(Address);
+    const address = await addressesRepository.findOne({
+      where: { id: addressId },
+    });
 
-      return response.status(200).json(address);
-    } catch (err) {
-      return response.status(200).json(undefined);
-    }
+    return response.status(200).json(address);
   }
 
   public async create(request: Request, response: Response): Promise<Response> {
-    try {
-      const { client_id, addresses } = request.body;
+    const { client_id, addresses } = request.body;
 
-      const createAddress = new CreateAddressService();
+    const createAddress = new CreateAddressService();
 
-      const address = await createAddress.execute({
-        client_id,
-        addresses,
-      });
+    const address = await createAddress.execute({
+      client_id,
+      addresses,
+    });
 
-      return response.json(address);
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    return response.json(address);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {
-    try {
-      const { addresses } = request.body;
+    const { addresses } = request.body;
 
-      const updateAddress = new UpdateAddressesService();
+    const updateAddress = new UpdateAddressesService();
 
-      const address = await updateAddress.execute({
-        addresses,
-      });
+    const address = await updateAddress.execute({
+      addresses,
+    });
 
-      return response.json(address);
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    return response.json(address);
   }
 
   public async delete(request: Request, response: Response): Promise<Response> {
-    try {
-      const { id } = request.query;
+    const { id } = request.query;
 
-      const deleteAddress = new DeleteAddressByIdService();
+    const deleteAddress = new DeleteAddressByIdService();
 
-      await deleteAddress.execute(String(id));
+    await deleteAddress.execute(String(id));
 
-      return response.status(204).send();
-    } catch (err) {
-      return response.status(400).json(err.message);
-    }
+    return response.status(204).send();
   }
 }

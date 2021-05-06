@@ -1,7 +1,8 @@
 import { getRepository } from 'typeorm';
 
-import Client from '../../models/Client';
-import Address from '../../models/Address';
+import AppError from '@errors/AppError';
+import Address from '@models/Address';
+import Client from '@models/Client';
 
 interface AddressProps {
   cep: string;
@@ -39,7 +40,7 @@ class CreateClientService {
     });
 
     if (checkClientExists) {
-      throw new Error('Email already exists');
+      throw new AppError('Email already exists');
     }
 
     const checkDuplicatedPrimaryAddresses = addresses.map(
@@ -50,7 +51,7 @@ class CreateClientService {
       checkDuplicatedPrimaryAddresses.filter(isPrimary => isPrimary === true)
         .length > 1
     ) {
-      throw new Error('Only allowed one primary address');
+      throw new AppError('Only allowed one primary address');
     }
 
     const client = clientsRepository.create({

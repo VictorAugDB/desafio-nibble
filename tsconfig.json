@@ -4,6 +4,8 @@
     "module": "commonjs",
     "lib": ["es6"],
     "allowJs": true,
+    "strict": true,
+    "strictPropertyInitialization": false,
     "outDir": "./dist",
     "rootDir": "./src",
     "removeComments": true,
@@ -24,6 +26,20 @@
       "@models/*": ["./models/*"],
       "@views/*": ["./views/*"],
       "@routes/*": ["./routes/*"],
+      "@errors/*": ["./errors/*"],
+      "@config/*": ["./config/*"]
     }
-  }
+  },
+  "exclude": [
+    ".idea",
+    "build",
+    "node_modules",
+    "typings/globals",
+    "typings/modules",
+    "coverage",
+    "jest.config.js",
+    "prettier.config.js",
+    "dist",
+    "babel.config.js"
+  ]
 }

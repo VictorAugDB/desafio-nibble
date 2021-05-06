@@ -1,6 +1,7 @@
+import AppError from '@errors/AppError';
 import { getRepository } from 'typeorm';
 
-import Address from '../../models/Address';
+import Address from '@models/Address';
 
 interface Request {
   addresses: Address[];
@@ -17,13 +18,13 @@ class UpdateAddressesService {
     if (
       checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length > 1
     ) {
-      throw new Error('Only allowed one primary address');
+      throw new AppError('Only allowed one primary address');
     }
 
     if (
       checkPrimaryAddresses.filter(isPrimary => isPrimary === true).length < 1
     ) {
-      throw new Error('Primary address is needed');
+      throw new AppError('Primary address is needed');
     }
 
     await addressesRepository.save(addresses);
