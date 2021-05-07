@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { clientRouter } from './client.routes';
-import { addressRouter } from './address.routes';
-import { managerRouter } from './manager.routes';
-import { sessionRouter } from './session.routes';
+import { clientRouter } from '../modules/clients/infra/http/routes/client.routes';
+import { addressRouter } from '../modules/addresses/infra/http/routes/address.routes';
+import { managerRouter } from '../modules/managers/infra/http/routes/manager.routes';
+import { sessionRouter } from '../modules/managers/infra/http/routes/session.routes';
 
 const routes = Router();
 
