@@ -33,14 +33,17 @@ class CreateAddressService {
 
   public async execute({ client_id, addresses }: IRequest): Promise<Address[]> {
     const client = await this.clientsRepository.findById(client_id);
+    const findAddresses = await this.addressesRepository.find({
+      where: { client_id },
+    });
 
     if (!client) {
       throw new AppError('Client does not exists');
     }
 
-    const addressesWithClientAddresses = [...client.addresses, ...addresses];
+    const existentAddressesWithNewAddresses = [...findAddresses, ...addresses];
 
-    const checkPrimaryAddresses = addressesWithClientAddresses.map(
+    const checkPrimaryAddresses = existentAddressesWithNewAddresses.map(
       address => address.is_primary_address,
     );
 

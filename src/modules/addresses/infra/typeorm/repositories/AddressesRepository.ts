@@ -1,4 +1,9 @@
-import { EntityRepository, getRepository, Repository } from 'typeorm';
+import {
+  EntityRepository,
+  FindManyOptions,
+  getRepository,
+  Repository,
+} from 'typeorm';
 import { IAddressesRepository } from '@modules/addresses/infra/repositories/IAddressesRepository';
 import ICreateAddressDTO from '@modules/addresses/dtos/ICreateAddressDTO';
 
@@ -36,7 +41,13 @@ class AddressesRepository implements IAddressesRepository {
     return addresses;
   }
 
-  public async find(): Promise<Address[]> {
+  public async find(options?: FindManyOptions): Promise<Address[]> {
+    if (options) {
+      const addresses = await this.ormRepository.find(options);
+
+      return addresses;
+    }
+
     const addresses = await this.ormRepository.find();
 
     return addresses;

@@ -6,6 +6,7 @@ import { orderBy } from 'lodash';
 import { container } from 'tsyringe';
 import FindAllClientsService from '@modules/clients/services/FindAllClientsService';
 import FindClientsWithPaginationService from '@modules/clients/services/FindClientsWithPaginationService';
+import CreateAddressService from '@modules/addresses/services/CreateAddressService';
 
 export default class ClientsController {
   public async find(request: Request, response: Response): Promise<Response> {
@@ -46,15 +47,26 @@ export default class ClientsController {
     const { name, cpf, telephone, email, addresses } = request.body;
 
     const createClient = container.resolve(CreateClientService);
+    const createAddresses = container.resolve(CreateAddressService);
 
     const client = await createClient.execute({
       name,
       cpf,
       telephone,
       email,
+    });
+
+    const addressesCreated = await createAddresses.execute({
+      client_id: client.id,
       addresses,
     });
-    return response.json(client);
+
+    const clientWithAddresses = {
+      ...client,
+      addresses: [...addressesCreated],
+    };
+
+    return response.json(clientWithAddresses);
   }
 
   public async update(request: Request, response: Response): Promise<Response> {

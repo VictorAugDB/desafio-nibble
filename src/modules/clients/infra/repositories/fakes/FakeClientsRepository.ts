@@ -2,6 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import Client from '@modules/clients/infra/typeorm/entities/Client';
 import ICreateClientDTO from '@modules/clients/dtos/ICreateClientDTO';
+import Address from '@modules/addresses/infra/typeorm/entities/Address';
 import { IClientsRepository } from '../IClientsRepository';
 
 export class FakeClientsRepository implements IClientsRepository {
