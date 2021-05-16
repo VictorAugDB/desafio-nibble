@@ -3,9 +3,10 @@ import { FakeClientsRepository } from '@modules/clients/infra/repositories/fakes
 import CreateClientService from '@modules/clients/services/CreateClientService';
 import AppError from '@shared/errors/AppError';
 import CreateAddressService from './CreateAddressService';
+import FindAddressByIdService from './FindAddressByIdService';
 
 describe('CreateClient', () => {
-  it('should be able to create a new address', async () => {
+  it('should be able to find an address by id', async () => {
     const fakeAddressesRepository = new FakeAddressesRepository();
     const fakeClientsRepository = new FakeClientsRepository();
 
@@ -14,6 +15,7 @@ describe('CreateClient', () => {
       fakeClientsRepository,
     );
     const createClient = new CreateClientService(fakeClientsRepository);
+    const findAddress = new FindAddressByIdService(fakeAddressesRepository);
 
     const client = await createClient.execute({
       name: 'joao',
@@ -50,10 +52,12 @@ describe('CreateClient', () => {
       ],
     });
 
-    addressesCreate.map(address => expect(address).toHaveProperty('id'));
+    await expect(findAddress.execute(addressesCreate[0].id)).resolves.toEqual(
+      addressesCreate[0],
+    );
   });
 
-  it('not should be able to create a new address if there are duplicate primary addresses ', async () => {
+  it('not should be able to find a non-existent address', async () => {
     const fakeAddressesRepository = new FakeAddressesRepository();
     const fakeClientsRepository = new FakeClientsRepository();
 
@@ -62,6 +66,7 @@ describe('CreateClient', () => {
       fakeClientsRepository,
     );
     const createClient = new CreateClientService(fakeClientsRepository);
+    const findAddress = new FindAddressByIdService(fakeAddressesRepository);
 
     const client = await createClient.execute({
       name: 'joao',
@@ -70,74 +75,36 @@ describe('CreateClient', () => {
       email: 'asdhaasaaasaaaasasaaasauhd@gmail.com',
     });
 
-    await expect(
-      createAddress.execute({
-        client_id: client.id,
-        addresses: [
-          {
-            cep: '12345154',
-            state: 'sp',
-            city: 'votorantim',
-            district: 'José do crespo',
-            road: 'Avenida da paz',
-            number: '1234',
-            complement: 'casa',
-            type: 'comercial',
-            is_primary_address: true,
-          },
-          {
-            cep: '12345153',
-            state: 'sp',
-            city: 'votorantim',
-            district: 'José do crespo',
-            road: 'Avenida da paz',
-            number: '1233',
-            complement: 'casa',
-            type: 'comercial',
-            is_primary_address: true,
-          },
-        ],
-      }),
-    ).rejects.toBeInstanceOf(AppError);
-  });
-
-  it('not should be able to create a new address to nonexistent client', async () => {
-    const fakeAddressesRepository = new FakeAddressesRepository();
-    const fakeClientsRepository = new FakeClientsRepository();
-
-    const createAddress = new CreateAddressService(
-      fakeAddressesRepository,
-      fakeClientsRepository,
-    );
+    await createAddress.execute({
+      client_id: client.id,
+      addresses: [
+        {
+          cep: '12345154',
+          state: 'sp',
+          city: 'votorantim',
+          district: 'José do crespo',
+          road: 'Avenida da paz',
+          number: '1234',
+          complement: 'casa',
+          type: 'comercial',
+          is_primary_address: true,
+        },
+        {
+          cep: '12345153',
+          state: 'sp',
+          city: 'votorantim',
+          district: 'José do crespo',
+          road: 'Avenida da paz',
+          number: '1233',
+          complement: 'casa',
+          type: 'comercial',
+          is_primary_address: false,
+        },
+      ],
+    });
 
     await expect(
-      createAddress.execute({
-        client_id: 'nonexistent client_id',
-        addresses: [
-          {
-            cep: '12345154',
-            state: 'sp',
-            city: 'votorantim',
-            district: 'José do crespo',
-            road: 'Avenida da paz',
-            number: '1234',
-            complement: 'casa',
-            type: 'comercial',
-            is_primary_address: true,
-          },
-          {
-            cep: '12345153',
-            state: 'sp',
-            city: 'votorantim',
-            district: 'José do crespo',
-            road: 'Avenida da paz',
-            number: '1233',
-            complement: 'casa',
-            type: 'comercial',
-            is_primary_address: false,
-          },
-        ],
-      }),
+      findAddress.execute('non-existent address id'),
     ).rejects.toBeInstanceOf(AppError);
   });
 });

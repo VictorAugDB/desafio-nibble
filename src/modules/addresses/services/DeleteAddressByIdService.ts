@@ -17,6 +17,10 @@ class DeleteAddressByIdService {
       throw new AppError('Address does not exists');
     }
 
+    if (address.is_primary_address) {
+      throw new AppError('Not is possible to delete a primary address');
+    }
+
     await this.addressesRepository.remove(address);
   }
 }
