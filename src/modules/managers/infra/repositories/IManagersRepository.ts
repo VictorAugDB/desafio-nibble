@@ -1,4 +1,4 @@
-import ICreateManagerDTO from '@modules/managers/dtos/ICreateManagerDTO';
+import { ICreateManagerDTO } from '@modules/managers/dtos/ICreateManagerDTO';
 import Manager from '../typeorm/entities/Manager';
 
 export interface IManagersRepository {

@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import AuthenticateManagerService from '@modules/managers/services/AuthenticateManagerService';
-import { ManagersRepository } from '@modules/managers/infra/http/repositories/ManagersRepository';
+import { ManagersRepository } from '@modules/managers/infra/typeorm/repositories/ManagersRepository';
 
 export default class SessionsController {
   public async login(request: Request, response: Response): Promise<Response> {

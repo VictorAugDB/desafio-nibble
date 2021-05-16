@@ -5,7 +5,7 @@ import AddressesRepository from '@modules/addresses/infra/typeorm/repositories/A
 import { IClientsRepository } from '@modules/clients/infra/repositories/IClientsRepository';
 import { ClientsRepository } from '@modules/clients/infra/typeorm/repositories/ClientsRepository';
 import { IManagersRepository } from '@modules/managers/infra/repositories/IManagersRepository';
-import { ManagersRepository } from '@modules/managers/infra/http/repositories/ManagersRepository';
+import { ManagersRepository } from '@modules/managers/infra/typeorm/repositories/ManagersRepository';
 
 container.registerSingleton<IAddressesRepository>(
   'AddressesRepository',
